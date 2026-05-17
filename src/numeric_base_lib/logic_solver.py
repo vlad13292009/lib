@@ -55,34 +55,34 @@ def solve_logic_table(func_body=None, var_order=None, known_frags=None, find_val
     print(header)
     print()
 
-    print("┌─ ШАГ 1: определите функцию F ──────────────────────┐")
+    print("┌─ ШАГ 1: переменные ───────────────────────────────┐")
+    print("│                                                    │")
+    print("│  Введите буквы переменных через пробел.            │")
+    print("│  Enter = x y z w                                   │")
+    print("│                                                    │")
+    print("└────────────────────────────────────────────────────┘")
+    var_input = input("  > ").strip()
+    var_order = var_input.split() if var_input else ["x", "y", "z", "w"]
+    var_str = ", ".join(var_order)
+    print()
+
+    print("┌─ ШАГ 2: логическое выражение ─────────────────────┐")
     print("│                                                    │")
     print("│  Логические операции:                              │")
     print("│    and — И (∧)      or — ИЛИ (∨)    not — НЕ (¬)  │")
     print("│    == — эквиваленция (≡)    != — XOR (⊕)           │")
     print("│    (not A) or B — импликация (→)                   │")
     print("│                                                    │")
-    print("│  Пример:                                           │")
-    print("│    def F(x, y, z, w):                              │")
-    print("│        return (z == w) and (not x or y) or not w   │")
+    print(f"│  Переменные: {var_str:<42}│")
+    print("│                                                    │")
+    print("│  Введите выражение (без def/return):                │")
+    print("│  Пример: (z == w) and (not x or y) or not w        │")
     print("│                                                    │")
     print("└────────────────────────────────────────────────────┘")
     print()
 
-    lines = []
-    for i in range(10):
-        inp = input(f"  {'>' if i == 0 else '>'} ").strip()
-        lines.append(inp)
-        if inp.startswith("return") and (i == 0 or len(lines) >= 2):
-            break
-        if "return" in inp and i >= 1:
-            break
-        if inp == "":
-            break
-
-    func_body = "\n".join(lines)
-    if not func_body.strip().startswith("def "):
-        func_body = "def F(x, y, z, w):\n    " + func_body.replace("\n", "\n    ")
+    expr = input("  > ").strip()
+    func_body = f"def F({var_str}):\n    return {expr}"
 
     local_scope = {}
     try:
@@ -92,19 +92,9 @@ def solve_logic_table(func_body=None, var_order=None, known_frags=None, find_val
             print("\n  ! Ошибка: функция F не найдена.")
             return None
     except Exception as e:
-        print(f"\n  ! Ошибка в функции: {e}")
+        print(f"\n  ! Ошибка в выражении: {e}")
         return None
 
-    print()
-
-    print("┌─ ШАГ 2: переменные ───────────────────────────────┐")
-    print("│                                                    │")
-    print("│  Введите буквы переменных через пробел.            │")
-    print("│  Enter = x y z w                                   │")
-    print("│                                                    │")
-    print("└────────────────────────────────────────────────────┘")
-    var_input = input("  > ").strip()
-    var_order = var_input.split() if var_input else ["x", "y", "z", "w"]
     print()
 
     print("┌─ ШАГ 3: какие строки ищем? ───────────────────────┐")
