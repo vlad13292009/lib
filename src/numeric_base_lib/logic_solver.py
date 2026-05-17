@@ -31,9 +31,6 @@ def _solve(
             for i, var_name in enumerate(perm):
                 local_vars[var_name] = row[i]
 
-            if any(v is None for v in local_vars.values()):
-                continue
-
             try:
                 res = eval(expression, {"__builtins__": None}, local_vars)
                 res_int = 1 if res else 0
@@ -43,6 +40,8 @@ def _solve(
                 if table_f is not None and res_int != table_f:
                     is_match = False
                     break
+            except TypeError:
+                continue
             except Exception:
                 is_match = False
                 break
